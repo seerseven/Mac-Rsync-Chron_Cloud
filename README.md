@@ -3,7 +3,7 @@ Sync dev files to the cloud without including Node Modules and more....
 
 # Usage
 
-##Confirm you have rsync
+## Confirm you have rsync
 
 MacOS and most Linux distros should come preloaded with the rsync binary. 
 Check that you have it by opening up a command prompt and running
@@ -12,7 +12,7 @@ Check that you have it by opening up a command prompt and running
 which rsync
 ```
 
-##Write the Sync Script
+## Write the Sync Script
 Edit the downloaded bash script backup.sh or whatever you choose to name it
 
 Change the src_dir and dest_dir to the directories you’d like. Make sure to include trailing slashes! Our rsync setup needs this.
@@ -25,18 +25,18 @@ The --filter=':- .gitignore' portion of the rsync command is really neat. It tel
 
 The --chmod='F-w' portion tells rsync that the copied files (but not directories) should have their write permissions removed. This is a good idea because it prevents us from accidentally going into the dest_dir instead of the authoritative src_dir and making edits. We unfortunately can’t do this for directories because we need to allow rsync to add new files and delete old ones.
 
-##Make sure it has execution permission.
+## Make sure it has execution permission.
 You can open command prompt and run..
 
 ```
 chmod +x <path-to-file>
 ```
-##Test the Sync Script
+## Test the Sync Script
 
 Let’s ensure the syncing script works. Open a prompt and execute it! 
 You should see a newly created dest_dir that excludes all the node_modules directories and whatnot.
 
-##Install the Cron Job
+## Install the Cron Job
 Open command prompt..
 execute crontab -e or nano crontab -e to open up a text editor for editing your cron tasks. 
 
@@ -52,7 +52,7 @@ Add the line:
 This runs our sync script every 10 minutes. Change the 10 to a 5 to run it every 5 minutes for example. 
 And of course make sure to write the absolute path to <path-to-sync-script>.
 
-##Test the Cron Job
+## Test the Cron Job
 
 Verify the cron job was saved by running crontab -l to list installed jobs.
 
@@ -63,4 +63,4 @@ You may have to open system prefs on a mac to give cron "full disk access"
 
 
 
-#Happy Scyncing !!
+# Happy Scyncing !!
