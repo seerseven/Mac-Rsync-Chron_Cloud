@@ -11,11 +11,34 @@ Check that you have it by opening up a command prompt and running
 ```
 which rsync
 ```
+It should print out something like /usr/bin/rsync.
+
 
 ## Write the Sync Script
 Edit the downloaded bash script backup.sh or whatever you choose to name it
 
-Change the src_dir and dest_dir to the directories you’d like. Make sure to include trailing slashes! Our rsync setup needs this.
+```
+
+#!/usr/bin/env bash
+
+set -e # always immediately exit upon error
+
+# directory config. ending slashes are important!
+src_dir="$HOME/Projects/"
+dest_dir="$HOME/Dropbox/Projects-Backup/"
+
+# run the sync
+rsync -ar --delete \
+  --filter=':- .gitignore' \
+  --exclude='node_modules' \
+  --exclude='.git' \
+  --exclude='.DS_Store' \
+  --chmod='F-w' \
+  "$src_dir" "$dest_dir"
+  ```
+
+Change the **src_dir** and **dest_dir** to the directories you’d like. 
+Make sure to include trailing slashes! Our rsync setup needs this.
 
 Please add or remove the --exclude args to your liking.
 
@@ -24,6 +47,7 @@ The a flags is a compound flag telling rsync to do a bunch of things that you do
 The --filter=':- .gitignore' portion of the rsync command is really neat. It tells rsync to exclude the files that are listed in the .gitignore file in each directory. These are files you already don’t care about, such as vendor files or temp files, so you won’t be forced to create another list!
 
 The --chmod='F-w' portion tells rsync that the copied files (but not directories) should have their write permissions removed. This is a good idea because it prevents us from accidentally going into the dest_dir instead of the authoritative src_dir and making edits. We unfortunately can’t do this for directories because we need to allow rsync to add new files and delete old ones.
+
 
 ## Make sure it has execution permission.
 You can open command prompt and run..
@@ -56,11 +80,15 @@ And of course make sure to write the absolute path to <path-to-sync-script>.
 
 Verify the cron job was saved by running crontab -l to list installed jobs.
 
+```
+cronjob -l
+```
+
 After installing the cron, try to make some modifications within your projects directory. 
 Then, after the current 10-minute interval of time ends (if it’s 4:32, wait until 4:40), watch your files sync!
 
-You may have to open system prefs on a mac to give cron "full disk access"
+**You may have to open system prefs on a mac to give cron "full disk access"**
 
 
 
-# Happy Scyncing !!
+# Happy Syncing !!
